@@ -1,0 +1,23 @@
+---
+description: Core project context and non-negotiable rules for the UCR filing app
+alwaysApply: true
+---
+
+# UCR Filing Service: core rules
+
+Read `AGENTS.md` at the repo root for architecture, flow, and current status. Update its **Status** section when you finish a task.
+
+## Non-negotiables
+- **Pricing is server-side.** Always compute totals with `quote()` from `src/lib/pricing.ts`. Never accept a price or total from the client.
+- **Orders exist only after payment.** `Order` rows are created only by the Lemon Squeezy webhook. Before payment, data lives in `Filing`.
+- **Third-party disclaimer.** Never remove or hide the "not affiliated with the UCR Plan / any government agency" text (`disclaimer` in `src/lib/site.ts`). Never imply we are ucr.gov.
+- **Secrets stay server-side.** FMCSA WebKey, Lemon Squeezy, and Resend keys are used only in `server-only` modules. Only `NEXT_PUBLIC_*` vars may reach the client.
+- **New env vars** go into `.env.example` with a comment.
+
+## Before finishing
+Run `npm run lint` and `npm run build`. Both must pass.
+
+## Conventions
+- Import alias `@/*` → `src/*`. Brand/contact strings come from `site` in `src/lib/site.ts`.
+- Money is stored and passed as integer **cents**; format with `formatUSD()`.
+- Keep code comments rare: only for constraints the code can't express.

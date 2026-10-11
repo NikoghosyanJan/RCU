@@ -1,0 +1,13 @@
+---
+description: UCR fee table and pricing logic rules
+globs: src/config/fees.ts,src/lib/pricing.ts,src/components/landing/fee-table.tsx
+alwaysApply: false
+---
+
+# Fees and pricing
+
+- `src/config/fees.ts` is the only place official UCR fees are defined, in cents, per registration year (`UCR_FEES`).
+- Current source: 49 CFR 367.50 and 91 FR 56063 (Federal Register, Sept 1, 2026). 2026: $46–$44,836. 2027: $55–$54,165.
+- Brokers and leasing companies always pay bracket B1 (`FLAT_FEE_ENTITY_TYPES`).
+- Adding a new year: add brackets to `UCR_FEES`, add the year to `REGISTRATION_YEARS`, update `DEFAULT_REGISTRATION_YEAR` and the landing hero/fee table copy. Verify amounts on plan.ucr.gov first; never guess fees.
+- The service fee comes from `SERVICE_FEE_CENTS` (env). Client components receive it as a prop and never read the env directly.

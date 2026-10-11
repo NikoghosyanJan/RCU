@@ -1,0 +1,21 @@
+---
+description: Lemon Squeezy checkout/webhook and Resend email rules
+globs: src/lib/lemonsqueezy.ts,src/app/api/webhooks/**,src/app/actions/checkout.ts,src/lib/email.ts,src/emails/**
+alwaysApply: false
+---
+
+# Payments and email
+
+## Lemon Squeezy
+- Checkouts use one product variant with `customPrice = quote().totalCents` and `checkoutData.custom.filing_id`.
+- The webhook must:
+  1. Verify `X-Signature` (HMAC-SHA256 of the **raw** body) before parsing.
+  2. Stay **idempotent**: look up by `lsOrderId` first, and treat Prisma `P2002` as a duplicate.
+  3. Return 2xx for events it intentionally ignores, so Lemon Squeezy doesn't retry forever. Return 5xx only for real failures that should be retried.
+- Handled events: `order_created` (status `paid`) and `order_refunded`. Add new events as separate `handleX` functions.
+- Test with `LEMONSQUEEZY_TEST_MODE="true"` and a tunnel (see README).
+
+## Email (Resend + React Email)
+- Templates live in `src/emails/` and use inline styles only.
+- Send through helpers in `src/lib/email.ts`. Email failures must be logged, never break the webhook or the admin action.
+- Tracking links must be full URLs built with `trackingUrl(orderNumber)`, never just the number.

@@ -1,0 +1,21 @@
+---
+description: Next.js App Router, server action, and form conventions
+globs: src/app/**/*.ts,src/app/**/*.tsx,src/components/**/*.tsx
+alwaysApply: false
+---
+
+# Next.js conventions
+
+- Public pages live in `src/app/(site)/` (shared header/footer layout). Admin lives in `src/app/admin/` (protected by `src/middleware.ts`).
+- Pages are Server Components by default. Add `"use client"` only for interactivity, and keep client components in `src/components/`.
+- `params` and `searchParams` are Promises in Next 15: `const { id } = await params;`
+- Mutations use Server Actions in `src/app/actions/*.ts` (`"use server"`). Validate input with the zod schemas from `src/lib/validation/` using `safeParse` and return `{ errors, message }`. Don't throw on validation failures.
+- Forms use `useActionState` + `FormField` (`src/components/form-field.tsx`). react-hook-form is intentionally **not** used.
+- Admin server actions must call `requireAdmin()` even though middleware also protects `/admin`.
+- Pages showing per-request DB data use `export const dynamic = "force-dynamic"`. Private pages set `robots: { index: false }`.
+
+```ts
+// Server action pattern
+const parsed = schema.safeParse(input);
+if (!parsed.success) return { ok: false, errors: toErrors(parsed.error) };
+```

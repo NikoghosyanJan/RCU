@@ -1,0 +1,17 @@
+---
+description: Prisma + Neon schema and migration rules
+globs: prisma/**,src/lib/db.ts
+alwaysApply: false
+---
+
+# Database (Prisma 6 + Neon)
+
+- Always import the client as `import { db } from "@/lib/db"`. Never create new `PrismaClient` instances.
+- `DATABASE_URL` is the pooled Neon URL; `DIRECT_URL` is the direct URL used for migrations.
+- After editing `prisma/schema.prisma`, create a migration with `npm run db:migrate -- --name <change>`. Never edit an applied migration.
+- Models:
+  - `Filing`: pre-payment application (status DRAFT → AWAITING_PAYMENT → PAID).
+  - `Order`: created only by the webhook. `orderNumber` is random (`generateOrderNumber`), `lsOrderId` is unique for idempotency.
+  - `OrderEvent`: every status change on an `Order` must also create an `OrderEvent` (powers the tracking timeline).
+- Use `$transaction` when updating `Filing` and creating `Order` together.
+- Prefer adding nullable columns or defaults so existing rows stay valid.

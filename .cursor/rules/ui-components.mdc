@@ -1,0 +1,15 @@
+---
+description: UI, styling, and shadcn/ui conventions
+globs: src/components/**/*.tsx,src/app/**/*.tsx,src/app/globals.css
+alwaysApply: false
+---
+
+# UI conventions
+
+- Use shadcn/ui components from `@/components/ui/*`. Add new ones with `npx shadcn@latest add <name>`. Don't hand-edit generated UI files unless fixing a bug.
+- Tailwind v4 with theme tokens (`bg-primary`, `text-muted-foreground`, `border`, ...). Don't hardcode colors except in email templates. The brand blue is `--primary` in `globals.css`.
+- Fonts: Geist variables are set on `<html>` in `src/app/layout.tsx`. Don't move them to `<body>`.
+- Native `<select>` is used in forms (simple and works with FormData). Keep the shared `selectClass` styling.
+- Inputs: `className="h-10"` and `aria-invalid` for error states. Show errors below fields via `FormField`.
+- Use icons from `lucide-react`. Layouts are mobile-first (`sm:`/`md:`/`lg:` breakpoints) with a `max-w-6xl` container on marketing pages.
+- Every page must stay usable on a 375px-wide screen.
