@@ -16,6 +16,7 @@
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
     "@prisma/client": "^6.19.3",
     "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.1.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
     "jose": "^6.2.12",

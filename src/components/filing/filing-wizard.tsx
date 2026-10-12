@@ -333,7 +333,7 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
         </Card>
       )}
 
-      {step === 2 && preview && (
+      {step === 2 && (
         <div className="grid gap-6 md:grid-cols-5">
           <Card className="md:col-span-3">
             <CardHeader>
@@ -371,25 +371,36 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
               <CardTitle>Order summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span>
-                  {data.registrationYear} UCR fee
-                  <span className="block text-xs text-muted-foreground">
-                    Bracket {preview.bracket.code}: {bracketLabel(preview.bracket)}
-                  </span>
-                </span>
-                <span>{formatUSD(preview.bracket.feeCents)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Software fee</span>
-                <span>{formatUSD(serviceFeeCents)}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between text-base font-semibold">
-                <span>Total due</span>
-                <span>{formatUSD(preview.total)}</span>
-              </div>
-              <Button size="lg" className="mt-2 h-11 w-full" onClick={() => router.push(`/file/${data.id}/confirm`)}>
+              {preview ? (
+                <>
+                  <div className="flex justify-between">
+                    <span>
+                      {data.registrationYear} UCR fee
+                      <span className="block text-xs text-muted-foreground">
+                        Bracket {preview.bracket.code}: {bracketLabel(preview.bracket)}
+                      </span>
+                    </span>
+                    <span>{formatUSD(preview.bracket.feeCents)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Software fee</span>
+                    <span>{formatUSD(serviceFeeCents)}</span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between text-base font-semibold">
+                    <span>Total due</span>
+                    <span>{formatUSD(preview.total)}</span>
+                  </div>
+                </>
+              ) : (
+                <p className="text-muted-foreground">Go back to Operation details and enter your number of vehicles to see your total.</p>
+              )}
+              <Button
+                size="lg"
+                className="mt-2 h-11 w-full"
+                disabled={!preview}
+                onClick={() => router.push(`/file/${data.id}/confirm`)}
+              >
                 Continue to confirmation <ArrowRight />
               </Button>
               <Button variant="ghost" className="w-full" onClick={() => setStep(1)}>

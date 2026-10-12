@@ -1,4 +1,5 @@
 import type { OrderStatus } from "@prisma/client";
+import { site } from "@/lib/site";
 
 export const ORDER_STATUS_FLOW: OrderStatus[] = ["PAID", "PROCESSING", "FILED", "COMPLETED"];
 
@@ -21,6 +22,5 @@ export const ORDER_STATUS_DESCRIPTION: Record<OrderStatus, string> = {
 };
 
 export function trackingUrl(orderNumber: string) {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  return `${base}/track/${orderNumber}`;
+  return `${site.url}/track/${orderNumber}`;
 }

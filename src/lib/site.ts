@@ -1,6 +1,6 @@
 export const site = {
   name: process.env.NEXT_PUBLIC_COMPANY_NAME || "UCR Filing Service",
-  url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  url: (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/+$/, ""),
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@example.com",
   supportPhone: process.env.NEXT_PUBLIC_SUPPORT_PHONE || "(800) 555-0100",
   legal: {
