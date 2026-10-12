@@ -8,8 +8,8 @@ export function SiteFooter() {
         <div className="md:col-span-2">
           <p className="font-semibold">{site.name}</p>
           <p className="mt-2 max-w-md text-sm text-muted-foreground">
-            Fast, accurate Unified Carrier Registration filing for carriers, brokers, freight forwarders,
-            and leasing companies.
+            Automated software that prepares, validates and files your annual Unified Carrier Registration for
+            carriers, brokers, freight forwarders and leasing companies.
           </p>
         </div>
         <div className="text-sm">
@@ -33,7 +33,11 @@ export function SiteFooter() {
       <div className="border-t">
         <div className="mx-auto max-w-6xl space-y-2 px-4 py-6 text-xs text-muted-foreground">
           <p><strong>Disclaimer:</strong> {disclaimer}</p>
-          <p>&copy; {new Date().getFullYear()} {site.name}. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} {site.legal.entityName}
+            {site.legal.entityName !== site.name && <> (operating as {site.name})</>}. {site.legal.address}. All rights
+            reserved.
+          </p>
         </div>
       </div>
     </footer>

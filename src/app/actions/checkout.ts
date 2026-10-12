@@ -52,6 +52,7 @@ export async function confirmAndPayAction(
       data: {
         status: "AWAITING_PAYMENT",
         agreedTermsAt: new Date(),
+        remindRenewal: formData.get("remindRenewal") === "on",
         feeBracket: q.bracket.code,
         ucrFeeCents: q.ucrFeeCents,
         serviceFeeCents: q.serviceFeeCents,

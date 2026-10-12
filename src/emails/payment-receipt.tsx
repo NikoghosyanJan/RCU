@@ -64,7 +64,7 @@ export function PaymentReceiptEmail(p: PaymentReceiptProps) {
             <ReceiptRow label="USDOT" value={p.usdotNumber} />
             <Hr style={hr} />
             <ReceiptRow label={`${p.registrationYear} UCR fee (bracket ${p.bracket})`} value={p.ucrFee} />
-            <ReceiptRow label="Service fee" value={p.serviceFee} />
+            <ReceiptRow label="Software fee" value={p.serviceFee} />
             <Hr style={hr} />
             <ReceiptRow label="Total paid" value={p.total} bold />
           </Section>

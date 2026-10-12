@@ -46,6 +46,7 @@ model Filing {
   serviceFeeCents  Int?
   totalCents       Int?
   agreedTermsAt    DateTime?
+  remindRenewal    Boolean      @default(true)
   lsCheckoutId     String?
   order            Order?
   createdAt        DateTime     @default(now())

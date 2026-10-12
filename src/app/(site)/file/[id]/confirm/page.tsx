@@ -48,7 +48,7 @@ export default async function ConfirmPage({ params }: { params: Promise<{ id: st
             <span>{formatUSD(q.ucrFeeCents)}</span>
           </div>
           <div className="flex justify-between">
-            <span>Service fee</span>
+            <span>Software fee</span>
             <span>{formatUSD(q.serviceFeeCents)}</span>
           </div>
           <Separator className="my-3" />

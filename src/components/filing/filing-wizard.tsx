@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { ENTITY_TYPES, REGISTRATION_YEARS } from "@/config/fees";
 import { US_STATES } from "@/config/states";
+import { compareWithFmcsa, type FilingWarning, type FmcsaRecord } from "@/lib/filing-checks";
 import { bracketLabel, formatUSD, getBracket } from "@/lib/pricing";
 import { formatPhone } from "@/lib/validation/filing";
 
@@ -46,6 +47,7 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState<string>();
   const [lookup, setLookup] = useState<LookupState>("idle");
+  const [fmcsa, setFmcsa] = useState<FmcsaRecord | null>(null);
   const [pending, startTransition] = useTransition();
 
   const set = (key: keyof WizardFiling) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -54,15 +56,24 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
   };
 
   useEffect(() => {
-    if (initial.legalName) return;
+    const resuming = !!initial.legalName;
     let cancelled = false;
-    setLookup("loading");
+    if (!resuming) setLookup("loading");
     fetch(`/api/fmcsa/${initial.usdotNumber}`)
       .then(async (res) => {
         if (cancelled) return;
-        if (res.status === 404) return setLookup("not-found");
-        if (!res.ok) return setLookup("error");
+        if (!res.ok) {
+          if (!resuming) setLookup(res.status === 404 ? "not-found" : "error");
+          return;
+        }
         const { carrier } = await res.json();
+        setFmcsa({
+          legalName: carrier.legalName,
+          state: carrier.state,
+          powerUnits: carrier.powerUnits,
+          allowedToOperate: carrier.allowedToOperate,
+        });
+        if (resuming) return;
         setData((d) => ({
           ...d,
           legalName: d.legalName || carrier.legalName,
@@ -76,11 +87,15 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
         }));
         setLookup("found");
       })
-      .catch(() => !cancelled && setLookup("error"));
+      .catch(() => {
+        if (!cancelled && !resuming) setLookup("error");
+      });
     return () => {
       cancelled = true;
     };
   }, [initial.legalName, initial.usdotNumber]);
+
+  const warnings = useMemo(() => (fmcsa ? compareWithFmcsa(data, fmcsa) : []), [data, fmcsa]);
 
   const preview = useMemo(() => {
     const count = Number(data.vehicleCount);
@@ -292,7 +307,7 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
                   <span>{formatUSD(preview.bracket.feeCents)}</span>
                 </div>
                 <div className="mt-1 flex justify-between text-muted-foreground">
-                  <span>Service fee</span>
+                  <span>Software fee</span>
                   <span>{formatUSD(serviceFeeCents)}</span>
                 </div>
                 <Separator className="my-2" />
@@ -302,6 +317,8 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
                 </div>
               </div>
             )}
+
+            <FmcsaWarnings warnings={warnings} />
 
             {message && <p className="text-sm text-destructive">{message}</p>}
             <div className="flex items-center justify-between">
@@ -323,6 +340,12 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
               <CardTitle>Review your information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-5 text-sm">
+              <FmcsaWarnings warnings={warnings} />
+              {fmcsa && warnings.length === 0 && (
+                <p className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-emerald-800">
+                  <CheckCircle2 className="size-4 shrink-0" /> Your details match your FMCSA record.
+                </p>
+              )}
               <ReviewBlock title="Company" onEdit={() => setStep(0)}>
                 <Row label="Legal name" value={data.legalName} />
                 {data.dbaName && <Row label="DBA" value={data.dbaName} />}
@@ -358,7 +381,7 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
                 <span>{formatUSD(preview.bracket.feeCents)}</span>
               </div>
               <div className="flex justify-between">
-                <span>Service fee</span>
+                <span>Software fee</span>
                 <span>{formatUSD(serviceFeeCents)}</span>
               </div>
               <Separator />
@@ -376,6 +399,25 @@ export function FilingWizard({ initial, serviceFeeCents }: { initial: WizardFili
           </Card>
         </div>
       )}
+    </div>
+  );
+}
+
+function FmcsaWarnings({ warnings }: { warnings: FilingWarning[] }) {
+  if (warnings.length === 0) return null;
+  return (
+    <div role="status" className="rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+      <p className="flex items-center gap-2 font-semibold">
+        <AlertTriangle className="size-4 shrink-0" /> Please double-check against your FMCSA record
+      </p>
+      <ul className="mt-2 list-disc space-y-1 pl-5">
+        {warnings.map((w) => (
+          <li key={w.field}>{w.message}</li>
+        ))}
+      </ul>
+      <p className="mt-2 text-xs text-amber-800">
+        You can still continue. If your FMCSA record is outdated, update it with FMCSA as well.
+      </p>
     </div>
   );
 }

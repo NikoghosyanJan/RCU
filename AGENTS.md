@@ -39,12 +39,16 @@ npm run db:studio    # browse data
 Done: everything in the original plan. Builds and lints clean. Landing, validation, webhook signature rejection, and the admin redirect have been checked in the browser.
 Landing copy now uses "digital service" wording: 100% online, auto-fill, fee calculated automatically, UCR delivered by email. Filing is still done by hand, so copy must not claim "instant" or "no humans" until filing is automated.
 Test USDOT `000000` (`TEST_USDOT` in `src/lib/fmcsa.ts`) returns fake company data without calling FMCSA, but only while `FMCSA_WEBKEY` is empty.
+Lemon Squeezy approval prep (2026-10-12): landing repositioned as "automated UCR filing software" (5-step flow, two-part pricing, visible "Important" block). Customer-facing fee label is now "Software fee". Terms / Privacy / Refund rewritten; refund policy = full refund only if we can't complete the filing (plus duplicate charges). The business is an Armenian Individual Entrepreneur: legal name, address, optional reg/tax ID, governing law (Republic of Armenia) and dispute venue (Yerevan) come from `NEXT_PUBLIC_LEGAL_*`, `NEXT_PUBLIC_GOVERNING_LAW`, `NEXT_PUBLIC_DISPUTE_VENUE` (`site.legal`). Don't reintroduce US-state wording in the Terms. The wizard shows non-blocking FMCSA mismatch warnings (`compareWithFmcsa` in `src/lib/filing-checks.ts`). The confirm page has a renewal-reminder opt-in saved to `Filing.remindRenewal`. Copy still says "we submit on your behalf", never "instant" or "no humans".
 
 Not yet done / next up:
-- [ ] Fill `.env` with real Neon / FMCSA / Lemon Squeezy / Resend credentials and run `npm run db:deploy`
+- [ ] Run `npm run db:deploy`: migration `20261012000000_renewal_reminder` adds `Filing.remindRenewal`, and filing pages fail until it is applied
+- [ ] Set `NEXT_PUBLIC_LEGAL_ENTITY_NAME`, `NEXT_PUBLIC_LEGAL_ADDRESS` (and optionally `NEXT_PUBLIC_LEGAL_REG_NUMBER`) before submitting the store for Lemon Squeezy review
+- [ ] Send renewal reminders (cron or admin bulk email to orders with `remindRenewal = true`, with an unsubscribe link). The Terms and Privacy pages already promise an opt-out link in the email
+- [ ] Fill `.env` with real Neon / FMCSA / Lemon Squeezy / Resend credentials
 - [ ] End-to-end test in Lemon Squeezy test mode via a tunnel (see README)
 - [ ] Deploy to Vercel and configure the production webhook
-- [ ] Replace placeholder company name/contact info; have the legal pages reviewed
+- [ ] Replace placeholder company name/contact info; have the legal pages reviewed by a lawyer
 - [ ] Ideas: abandoned-filing reminder emails, admin view of unpaid filings, rate limiting on public actions, Lemon Squeezy refunds from admin
 
 ## Rules for agents

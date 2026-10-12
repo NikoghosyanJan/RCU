@@ -75,6 +75,7 @@ export default async function AdminOrderPage({ params }: { params: Promise<{ id:
                 <Info label="Lemon Squeezy order" value={order.lsOrderId} />
                 <Info label="Paid at" value={order.createdAt.toLocaleString("en-US")} />
                 <Info label="Terms accepted" value={f.agreedTermsAt?.toLocaleString("en-US")} />
+                <Info label="Renewal reminder" value={f.remindRenewal ? "Opted in" : "Opted out"} />
                 {order.receiptUrl && (
                   <a href={order.receiptUrl} target="_blank" rel="noreferrer" className="text-primary underline">
                     View receipt

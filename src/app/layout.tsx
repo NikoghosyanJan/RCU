@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} | Fast UCR Registration for 2026 & 2027`,
+    default: `${site.name} | Automated UCR Filing Software`,
     template: `%s | ${site.name}`,
   },
   description:
-    "File your Unified Carrier Registration (UCR) online in minutes. Third-party filing service for motor carriers, brokers, freight forwarders and leasing companies.",
+    "Automated software that prepares, validates and files your annual Unified Carrier Registration (UCR) online. Private company, not affiliated with the UCR Plan or any government agency.",
   openGraph: {
     type: "website",
     siteName: site.name,

@@ -31,6 +31,7 @@ export function ConfirmForm({
     thirdParty: false,
     terms: false,
   });
+  const [remindRenewal, setRemindRenewal] = useState(true);
 
   const items: Item[] = [
     {
@@ -41,7 +42,7 @@ export function ConfirmForm({
       name: "authorize",
       label: (
         <>
-          I authorize {siteName} to prepare and submit the Unified Carrier Registration on behalf of{" "}
+          I authorize {siteName} to submit the Unified Carrier Registration on behalf of{" "}
           <strong>{companyName}</strong>.
         </>
       ),
@@ -50,8 +51,8 @@ export function ConfirmForm({
       name: "thirdParty",
       label: (
         <>
-          I understand that {siteName} is a private third-party service, not a government agency, and that the total
-          of <strong>{totalLabel}</strong> includes the official UCR fee plus a service fee. I could register directly at
+          I understand that {siteName} is a private company, not a government agency, and that the total of{" "}
+          <strong>{totalLabel}</strong> includes the official UCR fee plus a software fee. I could register directly at
           ucr.gov.
         </>
       ),
@@ -89,6 +90,19 @@ export function ConfirmForm({
           {state.errors?.[item.name] && <p className="text-xs text-destructive">{state.errors[item.name]}</p>}
         </div>
       ))}
+
+      <div className="flex items-start gap-3 rounded-lg border border-dashed p-4">
+        <Checkbox
+          id="remindRenewal"
+          name="remindRenewal"
+          className="mt-0.5"
+          checked={remindRenewal}
+          onCheckedChange={(v) => setRemindRenewal(v === true)}
+        />
+        <Label htmlFor="remindRenewal" className="block text-sm leading-relaxed font-normal">
+          Email me when next year&apos;s UCR renewal opens. <span className="text-muted-foreground">(Optional)</span>
+        </Label>
+      </div>
 
       {state.message && <p className="text-sm text-destructive">{state.message}</p>}
 
