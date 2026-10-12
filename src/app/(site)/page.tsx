@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BadgeCheck, Clock, FileText, Headphones, Lock, Search, ShieldCheck, Truck } from "lucide-react";
+import { BadgeCheck, Clock, FileText, Laptop, Lock, Mail, Search, Truck, Zap } from "lucide-react";
 import { FeeTable } from "@/components/landing/fee-table";
 import { LeadForm } from "@/components/landing/lead-form";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -11,26 +11,26 @@ import { site } from "@/lib/site";
 const steps = [
   {
     icon: FileText,
-    title: "Enter your details",
-    text: "Give us your name, contact info and USDOT number. We pull your company record from FMCSA automatically.",
+    title: "Fill out the online form",
+    text: "Enter your contact info and USDOT number. Our platform pulls your company record from FMCSA automatically.",
   },
   {
     icon: Search,
-    title: "Review & pay securely",
-    text: "Confirm your fleet size and fee bracket, then pay the official UCR fee plus our service fee in one checkout.",
+    title: "Review & pay online",
+    text: "Your fee bracket is calculated automatically from your fleet size. Pay the official UCR fee plus our service fee in one secure checkout.",
   },
   {
-    icon: BadgeCheck,
-    title: "We file for you",
-    text: "Our team submits your UCR registration and emails you a receipt and a link to track your order.",
+    icon: Mail,
+    title: "Get your UCR by email",
+    text: "Your registration is submitted and your UCR confirmation is delivered to your inbox. Track the status online anytime.",
   },
 ];
 
 const benefits = [
-  { icon: Clock, title: "Done in minutes", text: "A short, guided form instead of a confusing government portal." },
-  { icon: ShieldCheck, title: "Accuracy check", text: "We review your fleet size and bracket before filing." },
-  { icon: Truck, title: "Order tracking", text: "Follow every step of your filing with your private tracking link." },
-  { icon: Headphones, title: "Real support", text: "Questions? Our team answers by phone and email." },
+  { icon: Laptop, title: "100% digital", text: "No phone calls, no paperwork, no office visits. Everything happens online." },
+  { icon: Zap, title: "Smart auto-fill", text: "Company data from FMCSA and your exact fee are filled in for you." },
+  { icon: Mail, title: "Delivered by email", text: "Receipt, status updates and your UCR confirmation go straight to your inbox." },
+  { icon: Truck, title: "Live order tracking", text: "Follow every step of your filing with your private tracking link." },
 ];
 
 const faqs = [
@@ -55,6 +55,10 @@ const faqs = [
     a: `No. ${site.name} is a private, third-party filing service and is not affiliated with the UCR Plan or any government agency. You can file directly at ucr.gov. We charge a service fee of ${formatUSD(SERVICE_FEE_CENTS)} for preparing and submitting your filing.`,
   },
   {
+    q: "How do I receive my UCR registration?",
+    a: "Everything is online. Right after payment you get an email receipt with a tracking link, and your UCR confirmation is emailed to you as soon as your registration is complete. No calls or paperwork needed.",
+  },
+  {
     q: "How do I track my order?",
     a: "After payment, we email you a receipt with a direct tracking link. You can also enter your order number and email on the Track Order page.",
   },
@@ -70,14 +74,14 @@ export default function Home() {
               <Clock className="size-4" /> 2027 UCR registration is now open
             </p>
             <h1 className="mt-5 text-4xl font-bold tracking-tight sm:text-5xl">
-              File Your UCR Registration Online in Minutes
+              The Digital Way to File Your UCR
             </h1>
             <p className="mt-5 max-w-xl text-lg text-primary-foreground/80">
-              Stay compliant for 2026 and 2027. Enter your USDOT number and we&apos;ll handle the rest:
-              company lookup, fee calculation, and filing.
+              Fill out one short online form and get your UCR registration delivered by email. Our platform
+              pulls your company data from FMCSA and calculates your exact fee. No phone calls, no paperwork.
             </p>
             <ul className="mt-8 grid gap-3 text-sm sm:grid-cols-2">
-              {["Auto-filled from FMCSA", "Secure payment", "Email receipt & tracking", "US-based support"].map(
+              {["100% online", "Auto-filled from FMCSA", "Fee calculated automatically", "UCR delivered by email"].map(
                 (t) => (
                   <li key={t} className="flex items-center gap-2">
                     <BadgeCheck className="size-5 shrink-0" /> {t}

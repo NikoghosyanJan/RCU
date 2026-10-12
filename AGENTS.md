@@ -35,8 +35,10 @@ npm run db:studio    # browse data
 - `prisma/schema.prisma`: `Filing` (pre-payment), `Order` (post-payment only), `OrderEvent` (history)
 - `.env.example`: every required env var
 
-## Status (last updated 2026-10-11)
+## Status (last updated 2026-10-12)
 Done: everything in the original plan. Builds and lints clean. Landing, validation, webhook signature rejection, and the admin redirect have been checked in the browser.
+Landing copy now uses "digital service" wording: 100% online, auto-fill, fee calculated automatically, UCR delivered by email. Filing is still done by hand, so copy must not claim "instant" or "no humans" until filing is automated.
+Test USDOT `000000` (`TEST_USDOT` in `src/lib/fmcsa.ts`) returns fake company data without calling FMCSA, but only while `FMCSA_WEBKEY` is empty.
 
 Not yet done / next up:
 - [ ] Fill `.env` with real Neon / FMCSA / Lemon Squeezy / Resend credentials and run `npm run db:deploy`

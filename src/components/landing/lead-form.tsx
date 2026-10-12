@@ -88,7 +88,7 @@ export function LeadForm() {
         {!pending && <ArrowRight />}
       </Button>
       <p className="text-center text-xs text-muted-foreground">
-        Takes about 3 minutes. Secure checkout.
+        100% online. Takes about 3 minutes. Secure checkout.
       </p>
     </form>
   );

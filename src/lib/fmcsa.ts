@@ -42,7 +42,25 @@ async function qc<T>(path: string): Promise<T | null> {
   return (await res.json()) as T;
 }
 
+export const TEST_USDOT = "000000";
+
+const TEST_CARRIER: CarrierInfo = {
+  usdotNumber: TEST_USDOT,
+  legalName: "Test Trucking LLC",
+  dbaName: "Test Freight",
+  mcNumber: "123456",
+  address: "123 Test Street",
+  city: "Dallas",
+  state: "TX",
+  zip: "75201",
+  powerUnits: 3,
+  allowedToOperate: true,
+};
+
+// The test USDOT is only honored while no FMCSA key is configured, so it can't be used in production.
 export async function lookupCarrier(usdot: string): Promise<CarrierInfo | null> {
+  if (usdot === TEST_USDOT && !process.env.FMCSA_WEBKEY) return TEST_CARRIER;
+
   const [carrierRes, docketRes] = await Promise.all([
     qc<{ content?: { carrier?: QcCarrier } | null }>(`/carriers/${usdot}`),
     qc<{ content?: QcDocket[] | null }>(`/carriers/${usdot}/docket-numbers`).catch(() => null),
