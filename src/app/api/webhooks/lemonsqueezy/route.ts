@@ -84,7 +84,8 @@ async function handleOrderCreated(event: LsOrderEvent) {
             lsOrderId,
             amountCents: attributes.total,
             receiptUrl: attributes.urls?.receipt ?? null,
-            events: { create: { status: "PAID", note: "Payment received" } },
+            status: "COMPLETED",
+            events: { create: [{ status: "PAID", note: "Payment received" }, { status: "COMPLETED" }] },
           },
         });
       });
